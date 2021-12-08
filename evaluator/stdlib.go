@@ -518,6 +518,17 @@ func builtinSplit(split Value, it *IteratorValue) *IteratorValue {
 				return v
 			}
 			a = append(a, v)
+
+			// let "" split the value
+			switch split.(type) {
+			case *StringValue:
+				if split.(*StringValue).s == "" {
+					v = makeArray(a)
+					a = nil
+					return v
+				}
+			}
+
 			goto again
 		},
 		infinite: it.infinite,
